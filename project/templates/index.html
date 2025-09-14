@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tux Talks</title>
+  <style>
+    body {
+      background-color: #f9f5e9; /* cream */
+      color: #4b3621; /* soft brown */
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    #ascii {
+      white-space: pre;
+      font-size: 16px;
+      line-height: 1.2;
+      text-align: center;
+      padding: 20px;
+      background: #fffdf8;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+
+    #char {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      margin: 30px auto;
+    }
+
+    .speech-bubble {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 100%;
+      margin-bottom: 10px;
+      background: #fff8e6;
+      color: #333;
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid #e0cfa2;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      opacity: 0.98;
+      z-index: 10;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 100%;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid #fff8e6;
+    }
+
+    .speech-bubble.talk {
+      transform: translateX(-50%) translateY(-6px) scale(1.03);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.06) inset;
+    }
+
+    .speech-bubble.below {
+      top: 100%;
+      bottom: auto;
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+
+    .speech-bubble.below::after {
+      top: auto;
+      bottom: 100%;
+      border-top: none;
+      border-bottom: 10px solid #fff8e6;
+    }
+
+    .nav-button {
+      background: #fff8e6;
+      color: #4b3621;
+      border: 2px solid #d4b880;
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+
+    .nav-button:hover {
+      background: #f1e2b5;
+      transform: scale(1.05);
+    }
+
+    #upload-box {
+      background: #fffdf6;
+      border: 2px dashed #c1a878;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 40px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    #file-list {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="char">
+    <div id="speech-bubble" class="speech-bubble"></div>
+    <div id="ascii"></div>
+  </div>
+
+  <div id="nav-links">
+    <h3>🔗 Infrastructure Access</h3>
+    <a href="https://10.10.10.13" target="_blank">
+      <button class="nav-button">ESXi Server (10.10.10.13)</button>
+    </a>
+    <a href="https://10.10.10.50" target="_blank">
+      <button class="nav-button">ESXi Clients (10.10.10.50)</button>
+    </a>
+  </div>
+
+  <div id="upload-box">
+    <h3>📁 Share Files Across VMs</h3>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" multiple required>
+      <br><br>
+      <button class="nav-button" type="submit">Upload</button>
+      <button class="nav-button" type="button" onclick="window.location.href='/'">Back to Main Page</button>
+    </form>
+    <div id="file-list"></div>
+  </div>
+
+  <script>
+    const frames = [
+      String.raw`   .--.
+   |o_o |
+   | _/ |
+  //   \\
+   (|    | )
+  /'\_   _/\\
+  \___)=(___/`,
+
+      String.raw`   .--.
+   |-_- |
+   | _/ |
+  //   \\
+   (|     |  )
+  /'\_   _/\\
+  \___)=(___/`,
+
+      String.raw`   .--.
+   |O O |
+   | =  |
+  //   \\
+   (|     | )
+  /'\_   _/\\
+  \___)=(___/`,
+
+      String.raw`   .--.
+   |o_o |
+   |\_/ |
+  //   \\
+   (|      | )
+  /'\_   _/\\
+  \___)=(___/`,
+
+      String.raw`   .--.
+   |-_- |
+   | _/ |
+  //   \\
+   (|     | )
+  /'\_   _/\\
+  \___)=(___/`
+    ];
+
+    const statements = [
+      "Hello, Student",
+      "This is the test site!!!",
+      "The site is programmed to not use DNS.",
+      "DOMAIN NAME SYSTEM",
+      "We will open the authentication page",
+      "Using its IP address instead"
+    ];
+
+    let frameIndex = 0;
+    let textIndex = 0;
+    const frameIntervalMs = 2000;
+    const speechIntervalMs = 2500;
+    let frameTimer = null;
+    let speechTimer = null;
+    let paused = false;
+    const talkingFrames = new Set([2]);
+    const asciiEl = document.getElementById('ascii');
+    const bubbleEl = document.getElementById('speech-bubble');
+
+    function render() {
+      asciiEl.textContent = frames[frameIndex];
+      bubbleEl.textContent = statements[textIndex];
+      if (talkingFrames.has(frameIndex)) {
+        bubbleEl.classList.add('talk');
+      } else {
+        bubbleEl.classList.remove('talk');
+      }
+      bubbleEl.classList.remove('below');
+      requestAnimationFrame(() => {
+        const bubbleRect = bubbleEl.getBoundingClientRect();
+        if (bubbleRect.top < 6) {
+          bubbleEl.classList.add('below');
+        } else {
+          bubbleEl.classList.remove('below');
+        }
+      });
+    }
+
+    function startTimers() {
+      stopTimers();
+      frameTimer = setInterval(() => {
+        if (!paused) {
+          frameIndex = (frameIndex + 1) % frames.length;
+          render();
+        }
+      }, frameIntervalMs);
+
+      speechTimer = setInterval(() => {
+        if (!paused) {
+          textIndex = (textIndex + 1) % statements.length;
+          render();
+        }
+      }, speechIntervalMs);
+    }
+
+    function stopTimers() {
+      if (frameTimer) clearInterval(frameTimer);
+      if (speechTimer) clearInterval(speechTimer);
+    }
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('#nav-links')) return;
+      if (e.target.closest('#char') || e.target.tagName === 'BODY') {
+        paused = !paused;
+        asciiEl.style.opacity = paused ? '0.6' : '1';
+      }
+    });
+
+    document.querySelector('input[name="file"]').addEventListener('change', function () {
+      const fileListEl = document.getElementById('file-list');
+      fileListEl.innerHTML = '';
+      for (let f of this.files) {
+        fileListEl.innerHTML += `<div>📄 ${f.name} (${Math.round(f.size / 1024)} KB)</div>`;
+      }
+    });
+
+    render();
+    startTimers();
+  </script>
+</body>
+</html>
+
