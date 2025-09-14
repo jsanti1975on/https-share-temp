@@ -143,6 +143,8 @@
     // Use String.raw to avoid needing to double-escape backslashes in ASCII art
     // More frames for smoother animation; String.raw keeps backslashes as-is.
   // Keep head/eyes lines stable; only vary the beak line so the head doesn't stretch
+    // Added effects to the eyes and beak
+    
   const frames = [
     String.raw`   .--.
    |o_o |
@@ -186,15 +188,19 @@
   ];
 
     const statements = [
-      "Hello, Mr. Jason Santiago",
-      "This is the test site!!!"
+      "Hello, Student",
+      "This is the test site!!!",
+      "The site is programmed to not use DNS.",
+      "DOMAIN NAME SYSTEM",
+      "We will open the authentication page",
+      "Using it's IP address instead"
     ];
 
     // Separate timings: frames animate faster than speech.
     let frameIndex = 0;
     let textIndex = 0;
-    const frameIntervalMs = 1900; // slowed frames for readability
-    const speechIntervalMs = 2000; // speech changes every 2s
+    const frameIntervalMs = 2000; // slowed frames for readability
+    const speechIntervalMs = 2500; // speech changes every 2s
 
     let frameTimer = null;
     let speechTimer = null;
