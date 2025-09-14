@@ -23,9 +23,11 @@
       line-height: 1.2;
       text-align: center;
       padding: 20px;
-      background: #fffdf8;
+      background: #000;            /* Terminal black */
+      color: #00ff00;              /* Green text */
       border-radius: 10px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+      font-family: 'Courier New', Courier, monospace;
     }
 
     #char {
@@ -37,34 +39,15 @@
     }
 
     .speech-bubble {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 100%;
-      margin-bottom: 10px;
-      background: #fff8e6;
-      color: #333;
-      padding: 10px 16px;
-      border-radius: 12px;
-      border: 1px solid #e0cfa2;
-      max-width: 320px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      opacity: 0.98;
-      z-index: 10;
+      background: #000;            /* Terminal bubble black */
+      color: #00ff00;              /* Terminal green */
+      border: 1px solid #0f0;
+      font-family: monospace;
+      opacity: 0.96;
     }
 
     .speech-bubble::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      top: 100%;
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid #fff8e6;
+      border-top: 20px solid #000; /* Black triangle for speech tail */
     }
 
     .speech-bubble.talk {
@@ -203,7 +186,7 @@
 
     let frameIndex = 0;
     let textIndex = 0;
-    const frameIntervalMs = 2000;
+    const frameIntervalMs = 1000;
     const speechIntervalMs = 2500;
     let frameTimer = null;
     let speechTimer = null;
@@ -272,6 +255,76 @@
     render();
     startTimers();
   </script>
+<!-- 🌌 Anime Background Layer -->
+<div class="anime-bg"></div>
+<div class="anime-stars" id="anime-stars"></div>
+<div class="anime-silhouette"></div>
+
+<style>
+  .anime-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+    background: linear-gradient(to top, #2d1f42, #ecb1d9, #cde5ff);
+    animation: animeSky 30s ease-in-out infinite alternate;
+  }
+
+  @keyframes animeSky {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(30deg); }
+  }
+
+  .anime-stars {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  .anime-stars .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: twinkle 5s infinite ease-in-out;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.9; }
+  }
+
+  .anime-silhouette {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 25%;
+    background: url('https://i.imgur.com/7D7I6dI.png') bottom center no-repeat;
+    background-size: cover;
+    z-index: -1;
+    opacity: 0.7;
+  }
+</style>
+
+<script>
+  const container = document.getElementById('anime-stars');
+  const starCount = 80;
+
+  for (let i = 0; i < starCount; i++) {
+    const s = document.createElement('div');
+    const size = Math.random() * 2 + 1;
+    s.classList.add('star');
+    s.style.width = `${size}px`;
+    s.style.height = `${size}px`;
+    s.style.top = `${Math.random() * 100}%`;
+    s.style.left = `${Math.random() * 100}%`;
+    s.style.animationDelay = `${Math.random() * 5}s`;
+    container.appendChild(s);
+  }
+</script>
 </body>
 </html>
-
