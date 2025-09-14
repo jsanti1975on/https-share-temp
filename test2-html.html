@@ -10,7 +10,12 @@
       font-family: monospace;
       margin: 0;
       padding: 20px;
-      text-align: center;
+      /* center the whole page content so the character is centered vertically and horizontally */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
     }
 
     /* Cursor effect (optional if you want typing later) */
@@ -29,14 +34,73 @@
       line-height: 1.2;
       margin: 20px auto;
       text-align: center;
+      display: inline-block; /* keep width to content so bubble centers */
     }
 
-    #speech {
-      margin-top: 10px;
-      color: cyan;
-      font-style: italic;
+    /* speech bubble positioned above the ascii character; center the character */
+    #char {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      margin: 30px auto;
+    }
+
+    .speech-bubble {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 100%;
+      margin-bottom: 10px;
+      background: rgba(0,255,255,0.14); /* stronger so it's visible on black */
+      color: #0ff;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,255,0.35);
+      min-width: 140px;
+      max-width: 320px;
+      word-break: break-word;
       text-align: center;
-      min-height: 24px;
+      font-style: italic;
+      pointer-events: auto; /* allow clicking the bubble to pause */
+      transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+      opacity: 0.98;
+      z-index: 10;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 100%;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 10px solid rgba(0,255,255,0.08);
+    }
+
+    /* subtle talking/pulse state */
+    .speech-bubble.talk {
+      transform: translateX(-50%) translateY(-6px) scale(1.03);
+      box-shadow: 0 6px 18px rgba(0,255,255,0.06), 0 2px 6px rgba(0,255,255,0.06) inset;
+    }
+
+    /* when there isn't room above, flip the bubble below the character */
+    .speech-bubble.below {
+      top: 100%;
+      bottom: auto;
+      margin-top: 10px;
+      margin-bottom: 0;
+      transform: translateX(-50%);
+    }
+
+    .speech-bubble.below::after {
+      top: auto;
+      bottom: 100%;
+      border-top: none;
+      border-bottom: 10px solid rgba(0,255,255,0.14);
     }
 
     .nav-button {
@@ -59,9 +123,11 @@
   </style>
 </head>
 <body>
-  <h1>Tux Talks</h1>
-  <div id="ascii"></div>
-  <div id="speech"></div>
+  <!-- character wrapper: speech bubble sits above the ASCII art -->
+  <div id="char">
+    <div id="speech-bubble" class="speech-bubble"></div>
+    <div id="ascii"></div>
+  </div>
 
   <div id="nav-links" style="margin-top:30px;">
     <h3>🔗 Infrastructure Access</h3>
@@ -74,50 +140,138 @@
   </div>
 
   <script>
-    const frames = [
-`     .--.
-     |o_o |
-     |:_/ |
-    //   \\\\
+    // Use String.raw to avoid needing to double-escape backslashes in ASCII art
+    // More frames for smoother animation; String.raw keeps backslashes as-is.
+  // Keep head/eyes lines stable; only vary the beak line so the head doesn't stretch
+  const frames = [
+    String.raw`   .--.
+   |o_o |
+   | _/ |
+  //   \\
    (|     | )
-  /'\\_   _/\\
-  \\___)=(___/`,
+  /'\_   _/\
+  \___)=(___/`,
 
-`     .--.
-     |x_x |
-     |:_/ |
-    //   \\\\
+    String.raw`   .--.
+   |o_o |
+   | _/ |
+  //   \\
    (|     | )
-  /'\\_   _/\\
-  \\___)=(___/`,
+  /'\_   _/\
+  \___)=(___/`,
 
-`     .--.
-     |^_^ |
-     |:_/ |
-    //   \\\\
+    String.raw`   .--.
+   |-_- |
+   | o  |
+  //   \\
    (|     | )
-  /'\\_   _/\\
-  \\___)=(___/`
-    ];
+  /'\_   _/\
+  \___)=(___/`,
+
+    String.raw`   .--.
+   |o_o |
+   |\_/ |
+  //   \\
+   (|     | )
+  /'\_   _/\
+  \___)=(___/`,
+
+    String.raw`   .--.
+   |-_- |
+   | _/ |
+  //   \\
+   (|     | )
+  /'\_   _/\
+  \___)=(___/`
+  ];
 
     const statements = [
       "Hello, Mr. Jason Santiago",
       "This is the test site!!!"
     ];
 
+    // Separate timings: frames animate faster than speech.
     let frameIndex = 0;
     let textIndex = 0;
+    const frameIntervalMs = 220; // slowed frames for readability
+    const speechIntervalMs = 2000; // speech changes every 2s
 
-    function updateFrame() {
-      document.getElementById('ascii').textContent = frames[frameIndex];
-      document.getElementById('speech').textContent = statements[textIndex];
+    let frameTimer = null;
+    let speechTimer = null;
+    let paused = false;
 
-      frameIndex = (frameIndex + 1) % frames.length;
-      textIndex = (textIndex + 1) % statements.length;
+  // indexes of frames that represent 'beak open' for talking sync
+  const talkingFrames = new Set([2]);
+
+    const asciiEl = document.getElementById('ascii');
+    const bubbleEl = document.getElementById('speech-bubble');
+
+    function render() {
+      asciiEl.textContent = frames[frameIndex];
+      bubbleEl.textContent = statements[textIndex];
+      // toggle talk class when current frame is considered 'talking'
+      if (talkingFrames.has(frameIndex)) {
+        bubbleEl.classList.add('talk');
+      } else {
+        bubbleEl.classList.remove('talk');
+      }
+      // position the bubble above unless it would be clipped by the viewport top,
+      // in which case show it below the character.
+      bubbleEl.classList.remove('below');
+      // allow the browser to layout the bubble and ascii first
+      requestAnimationFrame(() => {
+        const bubbleRect = bubbleEl.getBoundingClientRect();
+        if (bubbleRect.top < 6) {
+          bubbleEl.classList.add('below');
+        } else {
+          bubbleEl.classList.remove('below');
+        }
+      });
     }
 
-    setInterval(updateFrame, 800);
-    updateFrame();
+    // re-evaluate bubble position on resize/orientation change
+    window.addEventListener('resize', () => {
+      render();
+    });
+
+    function startTimers() {
+      stopTimers();
+      frameTimer = setInterval(() => {
+        if (!paused) {
+          frameIndex = (frameIndex + 1) % frames.length;
+          render();
+        }
+      }, frameIntervalMs);
+
+      speechTimer = setInterval(() => {
+        if (!paused) {
+          textIndex = (textIndex + 1) % statements.length;
+          // when speech changes, ensure the current frame is rendered (no jump needed)
+          render();
+        }
+      }, speechIntervalMs);
+    }
+
+    function stopTimers() {
+      if (frameTimer) { clearInterval(frameTimer); frameTimer = null; }
+      if (speechTimer) { clearInterval(speechTimer); speechTimer = null; }
+    }
+
+    // click the ascii area or page to toggle pause/resume (but avoid toggling when clicking nav links)
+    document.addEventListener('click', (e) => {
+      // if click is within nav links, ignore
+      if (e.target.closest && e.target.closest('#nav-links')) return;
+      // toggle when clicking the character area or the page
+      if (e.target && (e.target.closest && e.target.closest('#char') || e.target.tagName === 'BODY')) {
+        paused = !paused;
+        // visual feedback
+        asciiEl.style.opacity = paused ? '0.6' : '1';
+      }
+    });
+
+    // initialize
+    render();
+    startTimers();
   </script>
 </body>
 </html>
