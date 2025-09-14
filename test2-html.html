@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tux Talks</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00FF00;
+      font-family: monospace;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Cursor effect (optional if you want typing later) */
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    #ascii {
+      white-space: pre;
+      font-size: 16px;
+      line-height: 1.2;
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    #speech {
+      margin-top: 10px;
+      color: cyan;
+      font-style: italic;
+      text-align: center;
+      min-height: 24px;
+    }
+
+    .nav-button {
+      background: #222;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .nav-button:hover {
+      background: #0f0;
+      color: #000;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Tux Talks</h1>
+  <div id="ascii"></div>
+  <div id="speech"></div>
+
+  <div id="nav-links" style="margin-top:30px;">
+    <h3>🔗 Infrastructure Access</h3>
+    <a href="https://10.10.10.13" target="_blank">
+      <button class="nav-button">ESXi Server (10.10.10.13)</button>
+    </a>
+    <a href="https://10.10.10.50" target="_blank">
+      <button class="nav-button">ESXi Clients (10.10.10.50)</button>
+    </a>
+  </div>
+
+  <script>
+    const frames = [
+`     .--.
+     |o_o |
+     |:_/ |
+    //   \\\\
+   (|     | )
+  /'\\_   _/\\
+  \\___)=(___/`,
+
+`     .--.
+     |x_x |
+     |:_/ |
+    //   \\\\
+   (|     | )
+  /'\\_   _/\\
+  \\___)=(___/`,
+
+`     .--.
+     |^_^ |
+     |:_/ |
+    //   \\\\
+   (|     | )
+  /'\\_   _/\\
+  \\___)=(___/`
+    ];
+
+    const statements = [
+      "Hello, Mr. Jason Santiago",
+      "This is the test site!!!"
+    ];
+
+    let frameIndex = 0;
+    let textIndex = 0;
+
+    function updateFrame() {
+      document.getElementById('ascii').textContent = frames[frameIndex];
+      document.getElementById('speech').textContent = statements[textIndex];
+
+      frameIndex = (frameIndex + 1) % frames.length;
+      textIndex = (textIndex + 1) % statements.length;
+    }
+
+    setInterval(updateFrame, 800);
+    updateFrame();
+  </script>
+</body>
+</html>
