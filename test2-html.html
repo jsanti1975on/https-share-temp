@@ -76,9 +76,9 @@
       top: 100%;
       width: 0;
       height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-top: 10px solid rgba(0,255,255,0.08);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid rgba(66, 196, 196, 0.904);
     }
 
     /* subtle talking/pulse state */
@@ -148,21 +148,21 @@
    |o_o |
    | _/ |
   //   \\
-   (|     | )
-  /'\_   _/\
-  \___)=(___/`,
-
-    String.raw`   .--.
-   |o_o |
-   | _/ |
-  //   \\
-   (|     | )
+   (|    | )
   /'\_   _/\
   \___)=(___/`,
 
     String.raw`   .--.
    |-_- |
-   | o  |
+   | _/ |
+  //   \\
+   (|     |  )
+  /'\_   _/\
+  \___)=(___/`,
+
+    String.raw`   .--.
+   |O O |
+   | =  |
   //   \\
    (|     | )
   /'\_   _/\
@@ -172,7 +172,7 @@
    |o_o |
    |\_/ |
   //   \\
-   (|     | )
+   (|      | )
   /'\_   _/\
   \___)=(___/`,
 
@@ -193,7 +193,7 @@
     // Separate timings: frames animate faster than speech.
     let frameIndex = 0;
     let textIndex = 0;
-    const frameIntervalMs = 220; // slowed frames for readability
+    const frameIntervalMs = 1900; // slowed frames for readability
     const speechIntervalMs = 2000; // speech changes every 2s
 
     let frameTimer = null;
