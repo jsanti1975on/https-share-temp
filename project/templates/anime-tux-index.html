@@ -5,8 +5,8 @@
   <title>Tux Talks</title>
   <style>
     body {
-      background-color: #f9f5e9; /* cream */
-      color: #4b3621; /* soft brown */
+      background-color: #f9f5e9;
+      color: #4b3621;
       font-family: 'Courier New', Courier, monospace;
       margin: 0;
       padding: 20px;
@@ -17,17 +17,38 @@
       min-height: 100vh;
     }
 
+    .terminal {
+      border: 2px solid #0f0;
+      border-radius: 6px;
+      background: #000;
+      padding: 0;
+      width: 380px;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+      position: relative;
+    }
+
+    .term-header {
+      background: #111;
+      color: #0f0;
+      font-size: 12px;
+      padding: 5px 10px;
+      font-family: monospace;
+      border-bottom: 1px solid #333;
+    }
+
     #ascii {
+      width: 360px;
+      height: 200px;
+      overflow: hidden;
+      background: #000;
+      color: #00ff00;
+      padding: 10px;
+      font-size: 18px;
+      font-family: 'Courier New', monospace;
       white-space: pre;
-      font-size: 24px;
-      line-height: 1.2;
       text-align: center;
-      padding: 20px;
-      background: #000;            /* Terminal black */
-      color: #00ff00;              /* Green text */
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-      font-family: 'Courier New', Courier, monospace;
+      line-height: 1.3;
+      box-sizing: border-box;
     }
 
     #char {
@@ -35,7 +56,7 @@
       flex-direction: column;
       align-items: center;
       position: relative;
-      margin: 30px auto;
+      margin: 10px 0 20px;
     }
 
     .speech-bubble {
@@ -44,34 +65,19 @@
       transform: translateX(-50%);
       bottom: 100%;
       margin-bottom: 10px;
-      background: rgb(240, 243, 243); /* stronger so it's visible on black */
-      color: rgb(0, 4, 255);
+      background: #ffffff;
+      color: #000;
       padding: 8px 12px;
-      border-top: 10px solid #000; /* match the bubble bg */
       border-radius: 12px;
-      border: 1px solid rgba(0,255,255,0.35);
+      border: 1px solid #ccc;
       min-width: 240px;
-      max-width: 420px;
+      max-width: 280px;
       word-break: break-word;
       text-align: center;
       font-style: italic;
-      pointer-events: auto; /* allow clicking the bubble to pause */
-      transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
-      opacity: 0.98;
+      font-family: monospace;
       z-index: 10;
-    }
-
-
-    .speech-bubble.talk {
-      transform: translateX(-50%) translateY(-6px) scale(1.03);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06), 0 2px 6px rgba(243, 237, 237, 0.993) inset;
-    }
-
-    .speech-bubble.below {
-      top: 100%;
-      bottom: auto;
-      margin-top: 10px;
-      margin-bottom: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .speech-bubble::after {
@@ -87,11 +93,9 @@
       border-top: 10px solid #ffffff;
     }
 
-    .speech-bubble.below::after {
-      top: auto;
-      bottom: 100%;
-      border-top: none;
-      border-bottom: 10px solid #ffffff;
+    .speech-bubble.talk {
+      transform: translateX(-50%) translateY(-6px) scale(1.03);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(243, 237, 237, 0.993) inset;
     }
 
     .nav-button {
@@ -103,7 +107,7 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       transition: 0.3s;
     }
 
@@ -117,8 +121,8 @@
       border: 2px dashed #c1a878;
       padding: 20px;
       border-radius: 10px;
-      margin-top: 40px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-top: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       text-align: center;
     }
 
@@ -127,13 +131,70 @@
       font-size: 14px;
       color: #555;
     }
+
+    .anime-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+      background-size: 400% 400%;
+      animation: gradientFlow 30s ease infinite;
+    }
+
+    @keyframes gradientFlow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .anime-stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .anime-stars .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 5s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50%      { opacity: 0.9; }
+    }
+
+    .anime-silhouette {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 25%;
+      background: url('https://i.imgur.com/7D7I6dI.png') bottom center no-repeat;
+      background-size: cover;
+      z-index: -1;
+      opacity: 0.7;
+    }
   </style>
 </head>
 <body>
 
   <div id="char">
-    <div id="speech-bubble" class="speech-bubble"></div>
-    <div id="ascii"></div>
+    <div class="speech-bubble" id="speech-bubble"></div>
+
+    <div class="terminal">
+      <div class="term-header">🟢 Tux Terminal</div>
+      <div id="ascii"></div>
+    </div>
   </div>
 
   <div id="nav-links">
@@ -156,6 +217,10 @@
     </form>
     <div id="file-list"></div>
   </div>
+
+  <div class="anime-bg"></div>
+  <div class="anime-stars" id="anime-stars"></div>
+  <div class="anime-silhouette"></div>
 
   <script>
     const frames = [
@@ -216,25 +281,26 @@
     let frameTimer = null;
     let speechTimer = null;
     let paused = false;
-    const talkingFrames = new Set([2]);
+
     const asciiEl = document.getElementById('ascii');
     const bubbleEl = document.getElementById('speech-bubble');
+    const talkingFrames = new Set([2]);
 
     function render() {
       asciiEl.textContent = frames[frameIndex];
       bubbleEl.textContent = statements[textIndex];
+
       if (talkingFrames.has(frameIndex)) {
         bubbleEl.classList.add('talk');
       } else {
         bubbleEl.classList.remove('talk');
       }
+
       bubbleEl.classList.remove('below');
       requestAnimationFrame(() => {
         const bubbleRect = bubbleEl.getBoundingClientRect();
         if (bubbleRect.top < 6) {
           bubbleEl.classList.add('below');
-        } else {
-          bubbleEl.classList.remove('below');
         }
       });
     }
@@ -279,79 +345,21 @@
 
     render();
     startTimers();
+
+    const container = document.getElementById('anime-stars');
+    const starCount = 80;
+
+    for (let i = 0; i < starCount; i++) {
+      const s = document.createElement('div');
+      const size = Math.random() * 2 + 1;
+      s.classList.add('star');
+      s.style.width = `${size}px`;
+      s.style.height = `${size}px`;
+      s.style.top = `${Math.random() * 100}%`;
+      s.style.left = `${Math.random() * 100}%`;
+      s.style.animationDelay = `${Math.random() * 5}s`;
+      container.appendChild(s);
+    }
   </script>
-<!-- 🌌 Anime Background Layer -->
-<div class="anime-bg"></div>
-<div class="anime-stars" id="anime-stars"></div>
-<div class="anime-silhouette"></div>
-
-<style>
-  .anime-bg {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -3;
-    background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
-    background-size: 400% 400%;
-    animation: gradientFlow 30s ease infinite;
-  }
-
-  @keyframes gradientFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  .anime-stars {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    pointer-events: none;
-  }
-
-  .anime-stars .star {
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: twinkle 5s infinite ease-in-out;
-  }
-
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.9; }
-  }
-
-  .anime-silhouette {
-    position: fixed;
-    bottom: 0; left: 0;
-    width: 100%;
-    height: 25%;
-    background: url('https://i.imgur.com/7D7I6dI.png') bottom center no-repeat;
-    background-size: cover;
-    z-index: -1;
-    opacity: 0.7;
-  }
-</style>
-
-<script>
-  const container = document.getElementById('anime-stars');
-  const starCount = 80;
-
-  for (let i = 0; i < starCount; i++) {
-    const s = document.createElement('div');
-    const size = Math.random() * 2 + 1;
-    s.classList.add('star');
-    s.style.width = `${size}px`;
-    s.style.height = `${size}px`;
-    s.style.top = `${Math.random() * 100}%`;
-    s.style.left = `${Math.random() * 100}%`;
-    s.style.animationDelay = `${Math.random() * 5}s`;
-    container.appendChild(s);
-  }
-</script>
 </body>
 </html>
