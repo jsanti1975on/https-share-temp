@@ -132,24 +132,7 @@
       color: #555;
     }
 
-    .anime-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -3;
-      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
-      background-size: 400% 400%;
-      animation: gradientFlow 30s ease infinite;
-    }
-
-    @keyframes gradientFlow {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
+    /* Optional animated stars */
     .anime-stars {
       position: fixed;
       top: 0;
@@ -170,57 +153,76 @@
 
     @keyframes twinkle {
       0%, 100% { opacity: 0.3; }
-      50%      { opacity: 0.9; }
+      50% { opacity: 0.9; }
     }
 
-    .anime-silhouette {
+    /* 🔁 TOPO VIDEO BACKGROUND */
+    #topo-video-bg {
       position: fixed;
-      bottom: 0;
+      top: 0;
       left: 0;
-      width: 100%;
-      height: 25%;
-      background: url('https://i.imgur.com/7D7I6dI.png') bottom center no-repeat;
-      background-size: cover;
-      z-index: -1;
-      opacity: 0.7;
+      width: 100vw;       /* Full viewport width */
+      height: 100vh;      /* Full viewport height */
+      object-fit: cover;  /* Keep aspect ratio, cover area */
+      z-index: -4;
+      opacity: 1.0;      /* Optional: adjust visibility */
+      pointer-events: none;
     }
+
+    #content-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end; /* Push all content to the right */
+      width: 100%;
+      max-width: 1200px;
+      padding: 40px 60px 60px;
+      box-sizing: border-box;
+    }
+
   </style>
 </head>
 <body>
+  <div id="content-wrapper">
+    
+    <div id="char">
+      <div class="speech-bubble" id="speech-bubble"></div>
 
-  <div id="char">
-    <div class="speech-bubble" id="speech-bubble"></div>
-
-    <div class="terminal">
-      <div class="term-header">🟢 Tux Terminal</div>
-      <div id="ascii"></div>
+      <div class="terminal">
+        <div class="term-header">🟢 Tux Terminal</div>
+        <div id="ascii"></div>
+      </div>
     </div>
-  </div>
 
-  <div id="nav-links">
-    <h3>🔗 Infrastructure Access</h3>
-    <a href="https://10.10.10.13" target="_blank">
-      <button class="nav-button">ESXi Server (10.10.10.13)</button>
-    </a>
-    <a href="https://10.10.10.50" target="_blank">
-      <button class="nav-button">ESXi Clients (10.10.10.50)</button>
-    </a>
-  </div>
+    <div id="nav-links">
+      <h3>🔗 Infrastructure Access</h3>
+      <a href="https://10.10.10.13" target="_blank">
+        <button class="nav-button">ESXi Server (10.10.10.13)</button>
+      </a>
+      <a href="https://10.10.10.50" target="_blank">
+        <button class="nav-button">ESXi Clients (10.10.10.50)</button>
+      </a>
+    </div>
 
-  <div id="upload-box">
-    <h3>📁 Share Files Across VMs</h3>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" name="file" multiple required>
-      <br><br>
-      <button class="nav-button" type="submit">Upload</button>
-      <button class="nav-button" type="button" onclick="window.location.href='/'">Back to Main Page</button>
-    </form>
-    <div id="file-list"></div>
-  </div>
+    <div id="upload-box">
+      <h3>📁 Share Files Across VMs</h3>
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" multiple required>
+        <br><br>
+        <button class="nav-button" type="submit">Upload</button>
+        <button class="nav-button" type="button" onclick="window.location.href='/'">Back to Main Page</button>
+      </form>
+      <div id="file-list"></div>
+    </div>
 
-  <div class="anime-bg"></div>
+  </div> <!-- ✅ This closes #content-wrapper -->
+
+  <!-- 🌌 Background Effects -->
+  <video autoplay muted loop playsinline id="topo-video-bg">
+    <source src="topo-loop.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
   <div class="anime-stars" id="anime-stars"></div>
-  <div class="anime-silhouette"></div>
 
   <script>
     const frames = [
@@ -289,7 +291,6 @@
     function render() {
       asciiEl.textContent = frames[frameIndex];
       bubbleEl.textContent = statements[textIndex];
-
       if (talkingFrames.has(frameIndex)) {
         bubbleEl.classList.add('talk');
       } else {
