@@ -19,13 +19,13 @@ An interactive, animated terminal character (Tux the penguin) paired with a loop
 🌈 Gradient animation fallback if video not supported
 
 🖱️ Pause/resume animations on click
-
+```bash
 📁 Project Structure
 tux-talks/
 ├── index.html
 ├── topo-loop.mp4         <-- Your network background loop
 └── assets/               <-- (optional) For images, alt videos, etc.
-
+```
 🧠 Requirements
 
 Works locally in any modern browser (Chrome, Edge, Firefox)
