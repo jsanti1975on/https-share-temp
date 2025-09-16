@@ -1,43 +1,86 @@
-# Pratice Ether 
-✅ Target Topology
+🖥️ Lab Design Overview
+East 3560 (Clients side)
 
-East Fa0/1 → RV340 LAN2
+Fa0/1 → RV340 (single trunk uplink, VLANs 10, 20, 999).
 
-Single trunk (dot1q), VLAN 999 native, VLANs 10 & 999 allowed.
+Fa0/7–8 → West 3560 (EtherChannel trunk Po7, VLANs 10, 20, 999).
 
-East Fa0/7–Fa0/8 ⇔ West Fa0/7–Fa0/8
+Fa0/3–4 → vSphere Host1 (clients) (EtherChannel Po2, access VLAN 10).
 
-EtherChannel (Po7) as a trunk between the two switches.
+Provides clients VLAN 10, routes to servers VLAN 20.
 
-VLAN 999 native, VLANs 10 & 999 allowed.
+West 3560 (Servers + Wireless)
 
-This gives you:
+Fa0/7–8 → East 3560 (EtherChannel trunk Po7, VLANs 10, 20, 999).
 
-Router uplink: simple and stable.
+Fa0/1–2 → Server LAG (Po2, access VLAN 20).
 
-East–West core link: EtherChannel trunk = great for practice.
+Fa0/8 → WLC (access VLAN 10 for simplicity; could trunk later if multiple SSIDs).
 
-ESXi/vSphere bundles: you can still do Po2/Po3/Po4 for access ports to VLAN 10.
+Provides servers VLAN 20, also extends VLAN 10 for wireless clients.
 
-# East 3560 Config
+Routing
+
+Both switches will do Inter-VLAN routing (SVIs).
+
+VLAN 999 = native transit (management).
+
+VLAN 10 = Clients (East, wireless users).
+
+VLAN 20 = Servers (West).
+
+Use OSPF between East and West for dynamic routing (so you practice).
+
+🔹 VLAN Plan
+
+VLAN 10 = Clients (East ESXi clients + Wireless users)
+
+VLAN 20 = Servers (West server farm)
+
+VLAN 999 = Native/Transit (for trunks, mgmt optional)
+
+🔹 East 3560 Config
 ```Yaml
-! ====== Uplink to RV340 (single trunk) ======
+hostname East
+no ip domain-lookup
+ip routing
+
+! VLANs
+vlan 10
+ name Clients
+vlan 20
+ name Servers
+vlan 999
+ name Transit
+
+! SVIs for routing
+interface vlan 10
+ ip address 10.10.10.1 255.255.255.0
+ no shutdown
+interface vlan 20
+ ip address 10.20.20.1 255.255.255.0
+ no shutdown
+interface vlan 999
+ ip address 10.99.99.1 255.255.255.0
+ no shutdown
+
+! Trunk to RV340
 interface fa0/1
  description Trunk-to-RV340
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
- switchport trunk allowed vlan 10,999
+ switchport trunk allowed vlan 10,20,999
  no shutdown
 
-! ====== EtherChannel trunk to West (Fa0/7-8) ======
+! EtherChannel trunk to West
 default interface range fa0/7 - 8
 interface range fa0/7 - 8
  description Trunk-to-West
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
- switchport trunk allowed vlan 10,999
+ switchport trunk allowed vlan 10,20,999
  channel-protocol lacp
  channel-group 7 mode active
  no shutdown
@@ -47,19 +90,62 @@ interface port-channel 7
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
- switchport trunk allowed vlan 10,999
-```
+ switchport trunk allowed vlan 10,20,999
 
-# West 3560 Config
+! EtherChannel to vSphere (clients VLAN 10)
+default interface range fa0/3 - 4
+interface range fa0/3 - 4
+ description vSphere-Clients
+ switchport mode access
+ switchport access vlan 10
+ channel-protocol lacp
+ channel-group 2 mode active
+ no shutdown
+
+interface port-channel 2
+ description vSphere-Clients
+ switchport mode access
+ switchport access vlan 10
+
+! OSPF routing
+router ospf 1
+ network 10.10.10.0 0.0.0.255 area 0
+ network 10.20.20.0 0.0.0.255 area 0
+ network 10.99.99.0 0.0.0.255 area 0
+```
+🔹 West 3560 Config
 ```Yaml
-! ====== EtherChannel trunk to East (Fa0/7-8) ======
+hostname West
+no ip domain-lookup
+ip routing
+
+! VLANs
+vlan 10
+ name Clients
+vlan 20
+ name Servers
+vlan 999
+ name Transit
+
+! SVIs for routing
+interface vlan 10
+ ip address 10.10.10.2 255.255.255.0
+ no shutdown
+interface vlan 20
+ ip address 10.20.20.2 255.255.255.0
+ no shutdown
+interface vlan 999
+ ip address 10.99.99.2 255.255.255.0
+ no shutdown
+
+! EtherChannel trunk to East
 default interface range fa0/7 - 8
 interface range fa0/7 - 8
  description Trunk-to-East
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
- switchport trunk allowed vlan 10,999
+ switchport trunk allowed vlan 10,20,999
  channel-protocol lacp
  channel-group 7 mode active
  no shutdown
@@ -69,28 +155,65 @@ interface port-channel 7
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
- switchport trunk allowed vlan 10,999
+ switchport trunk allowed vlan 10,20,999
+
+! EtherChannel to Servers (VLAN 20)
+default interface range fa0/1 - 2
+interface range fa0/1 - 2
+ description Server-Bundle
+ switchport mode access
+ switchport access vlan 20
+ channel-protocol lacp
+ channel-group 2 mode active
+ no shutdown
+
+interface port-channel 2
+ description Server-Bundle
+ switchport mode access
+ switchport access vlan 20
+
+! Wireless Controller (simple, VLAN 10 access)
+interface fa0/8
+ description WLC
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+
+! OSPF routing
+router ospf 1
+ network 10.10.10.0 0.0.0.255 area 0
+ network 10.20.20.0 0.0.0.255 area 0
+ network 10.99.99.0 0.0.0.255 area 0
 ```
+🔎 Testing Plan
 
-# 🔎 Verification
+EtherChannel
 
-> On both East & West:
-```Yaml
-show etherchannel summary
-show interfaces trunk
-show spanning-tree vlan 10,999
-```
+show etherchannel summary → Po7(SU) with (P) members on East & West.
 
-# Expected:
+Shut Fa0/7 on East → Po7 stays up via Fa0/8.
 
-Po7(SU) with Fa0/7(P) + Fa0/8(P)
+Routing
 
-Native VLAN = 999
+Client VM in VLAN 10 on East → ping server in VLAN 20 on West (routed by the switches).
 
-Allowed VLANs = 10,999
+Wireless client (Homework SSID on WLC) → ping server in VLAN 20.
 
-STP sees Po7 as a single P2p trunk.
+OSPF
 
-⚡ This setup keeps the lab progressing smoothly — RV340 is happy with its single trunk, and you get to practice LACP EtherChannel on your Catalyst switches.
+show ip ospf neighbor → East & West adjacency on VLAN 999 SVI.
 
-👉 Do you also want me to give you a test plan (e.g. ping between VLANs, shut one member of Po7, watch traffic keep flowing) so you can prove EtherChannel resiliency in your lab?
+Verify route tables: show ip route ospf.
+
+✅ With this design:
+
+East = client side (ESXi bundles).
+
+West = server side (server bundle + WLC).
+
+RV340 = single trunk for Internet/L3 WAN edge.
+
+Inter-VLAN routing + dynamic routing are fully demoed.
+
+EtherChannel = practiced East⇔West, East⇔ESXi, West⇔Servers.
