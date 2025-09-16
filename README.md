@@ -163,8 +163,8 @@ show spanning-tree vlan 10,999
 ```
 - vmnetwork = name of dynamic interface
 - 10 = VLAN ID
-- 10.0.10.1/24 = IP address for WLC on VLAN 10
-- 10.0.10.254 = gateway (probably the RV340)==> Yes I am using last usable addy!
+- 10.10.10.1/24 = IP address for WLC on VLAN 10
+- 10.10.10.254 = gateway (probably the RV340)==> Yes I am using last usable addy!
 
 ### WLAN/SSID setup
 ```Yaml
@@ -175,20 +175,20 @@ show spanning-tree vlan 10,999
 (Cisco Controller) > config wlan security wpa akm psk set-key ascii 1 MyHomeworkPass
 (Cisco Controller) > config wlan enable 1
 ```
-📡 Cisco Aironet 2602i AP (Lightweight Mode)
+📡 Cisco Aironet 2602i AP (Lightweight Mode)=> Dont copy paste config below - using 10.10.10.0/24 not 10.0.10.254
 
 The 2602i is a CAPWAP lightweight AP, so you don’t usually configure SSIDs directly on it — it downloads its config from the WLC after it joins.
 All it needs is:
 
 IP address (DHCP from VLAN 10 or static in VLAN 10)
 
-Reachability to the WLC management IP (10.0.10.1 in this case)
+Reachability to the WLC management IP (10.10.10.1 in this case)
 
 AP Boot CLI (if statically configured)
 AP> enable
 AP# configure terminal
 AP(config)# interface BVI1
-AP(config-if)# ip address 10.0.10.20 255.255.255.0
+AP(config-if)# ip address 10.10.10.20 255.255.255.0
 AP(config-if)# ip default-gateway 10.0.10.254
 AP(config)# capwap ap controller ip address 10.0.10.1
 AP(config)# end
