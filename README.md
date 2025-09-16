@@ -11,10 +11,11 @@
 hostname East
 no ip domain-lookup
 service password-encryption
+
 vtp mode transparent
 spanning-tree mode pvst
 spanning-tree portfast default
-spanning-tree bpduguard default
+spanning-tree portfast bpduguard default
 errdisable recovery cause all
 errdisable recovery interval 30
 
@@ -27,24 +28,27 @@ vlan 999
 ! ===== LACP to RV340 (Fa0/1-2 -> Po1) TRUNK =====
 interface range fa0/1 - 2
  description Uplink-to-RV340
+ switchport
  switchport trunk encapsulation dot1q
- switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,999
+ switchport mode trunk
  channel-protocol lacp
  channel-group 1 mode active
  no shutdown
 
 interface port-channel 1
  description LAG-to-RV340
+ switchport
  switchport trunk encapsulation dot1q
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,999
  switchport mode trunk
 
-! ===== Trunk to West switch =====
+! ===== Trunk to West Switch =====
 interface gi0/1
  description Trunk-to-West-3560
+ switchport
  switchport trunk encapsulation dot1q
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,999
