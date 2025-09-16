@@ -3,7 +3,9 @@
 ## September 09-16-25 to do below: entire Cisco network config: Quik and Dirty Topo Below
 <img width="1330" height="694" alt="Topo-Map" src="https://github.com/user-attachments/assets/542ca273-f579-4d94-afcd-8e83b40e389b" />
 
-### Configs: East 3560 (WS-C3560-8PC-S) — “core/left” switch
+## Configs: East 3560 (WS-C3560-8PC-S) — “core/left” switch
+
+### Reminder to use => *switchport trunk encapsulation dot1q* on these 3560s
 ```Yaml
 ! ===== Global =====
 hostname East
@@ -25,17 +27,17 @@ vlan 999
 ! ===== LACP to RV340 (Fa0/1-2 -> Po1) TRUNK =====
 interface range fa0/1 - 2
  description Uplink-to-RV340
- switchport
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,999
- switchport mode trunk
  channel-protocol lacp
  channel-group 1 mode active
  no shutdown
 
 interface port-channel 1
  description LAG-to-RV340
- switchport
+ switchport trunk encapsulation dot1q
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,999
  switchport mode trunk
@@ -43,7 +45,7 @@ interface port-channel 1
 ! ===== Trunk to West switch =====
 interface gi0/1
  description Trunk-to-West-3560
- switchport
+ switchport trunk encapsulation dot1q
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,999
  switchport mode trunk
@@ -112,7 +114,7 @@ vlan 999
 ! ===== Trunk back to East =====
 interface gi0/1
  description Trunk-to-East-3560
- switchport
+ switchport trunk encapsulation dot1q
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,999
  switchport mode trunk
