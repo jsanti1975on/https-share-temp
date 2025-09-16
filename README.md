@@ -164,7 +164,7 @@ show spanning-tree vlan 10,999
 - vmnetwork = name of dynamic interface
 - 10 = VLAN ID
 - 10.0.10.1/24 = IP address for WLC on VLAN 10
-- 10.0.10.254 = gateway (probably the RV340)
+- 10.0.10.254 = gateway (probably the RV340)==> Yes I am using last usable addy!
 
 ### WLAN/SSID setup
 ```Yaml
