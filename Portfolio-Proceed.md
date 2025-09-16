@@ -1,4 +1,4 @@
-# Revised Lab Design => Review below later after reconfig => tthis file is just for a time stamp and to move on with portfolio
+# Revised Lab Design => Review below later after reconfig => this file is just for a time stamp and to move on with portfolio
 Router (RV340)
 
 Use one physical uplink (say Fa0/1 on East 3560 → LAN2 on RV340).
