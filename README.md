@@ -5,7 +5,12 @@
 
 ## Configs: East 3560 (WS-C3560-8PC-S) — “core/left” switch
 
-### Reminder to use => *switchport trunk encapsulation dot1q* on these 3560s
+### Reminder to use => *switchport trunk encapsulation dot1q* on these 3560s also 
+> Important points
+> BPDU Guard:
+> On IOS 12.2/15.x for the 3560, the correct syntax is:
+> spanning-tree portfast bpduguard default
+
 ```Yaml
 ! ===== Global =====
 hostname East
