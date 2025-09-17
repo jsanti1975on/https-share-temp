@@ -54,3 +54,28 @@ Example from lab testing (Windows VM):
 - VM can reach **workload/data network** (VLAN 10) via Ethernet0.
 - VM can reach **WLC GUI / management network** (VLAN 999) via Ethernet1.
 - Verified by successful ping to `10.10.99.254` from `10.10.99.50`.
+
+# vSwitch Topology Notes
+- SW_vNIC01 has two port groups:
+- Pnic01 (VLAN 10) → Tagged for VM data network (172.20.10.0/24).
+- VLAN999-Mgmt (VLAN 999) → Added today for testing WLC web GUI access.
+
+## Physical uplinks:
+- vmnic1 is connected to the RV340.
+- Pnic01 is tagged for VLAN 10.
+- VLAN999-Mgmt is untagged/native on VLAN 999.
+
+### Purpose of VLAN999-Mgmt:
+- Allows direct VM-to-WLC management communication.
+- Configured with a test IP (e.g. 10.10.99.50/24).
+- Can be disabled or removed when not needed.
+  - **This ensures:**
+  - VM workloads run normally on VLAN 10.
+  - WLC GUI is accessible on VLAN 999 without disrupting production traffic.
+  - *Ref. Images Below*
+ 
+<img width="839" height="452" alt="15" src="https://github.com/user-attachments/assets/ce3af335-6929-4e47-8570-a0495b6ce987" />
+<img width="1089" height="1704" alt="14" src="https://github.com/user-attachments/assets/33ff6927-797d-4d18-bbb7-34fcdbfd3498" />
+
+
+
