@@ -79,8 +79,16 @@ After cabling the Cisco AP to the West 3560 (PoE enabled):
 <img width="1033" height="443" alt="8" src="https://github.com/user-attachments/assets/e88fac3d-29bf-4c68-802f-20916c035f41" />
 <img width="1050" height="316" alt="9" src="https://github.com/user-attachments/assets/9db0111a-8439-49e2-ab85-6e6eafac055a" />
 
-> After some simple commands I wanted to test the web gui - just to view it and came to realive I am on a different subnet.
+> After some simple commands I wanted to test the web Gui - just to view it and came to realize I am on a different subnet.
 <img width="1078" height="1117" alt="10" src="https://github.com/user-attachments/assets/2453a0c4-9e7c-4455-99fc-19bcf4842832" />
+> Working in a remote virtualized environment can get a bit tricky  but can be learned with every day practice.
+> Image below shows the VLANs to Port Table. We also need to consider the vSphere 8 host and how the configurations are mapped.
+<img width="1081" height="956" alt="11" src="https://github.com/user-attachments/assets/fa6ae92a-73a3-454f-9276-dd32a675b3cc" />
+<img width="698" height="312" alt="12" src="https://github.com/user-attachments/assets/ef1672e1-b043-4179-af00-5295fe4360aa" />
+
+
+
+
 
 
 
