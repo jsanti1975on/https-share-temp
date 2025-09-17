@@ -48,3 +48,12 @@ Ping tests after fix:
 - **Management VLAN (999)**: Consistent across East, West, and RV340.
 - **Gateway (10.10.99.254)**: Reachable from both switches.
 - **VLAN1**: Shutdown to prevent DHCP conflicts.
+
+### Screenshots
+<img width="941" height="1050" alt="troubleshoot1" src="https://github.com/user-attachments/assets/7249c619-3cd5-4625-8a4f-0ea66d39256e" />
+<img width="940" height="1255" alt="troubleshoot2" src="https://github.com/user-attachments/assets/3511bd27-317c-4b98-b76a-564401b3ab59" />
+<img width="952" height="1092" alt="troubleshoot3-VLAN1-AT- 147" src="https://github.com/user-attachments/assets/daa80ce1-911b-4151-8a66-7cc1010815a7" />
+<img width="993" height="1600" alt="troubleshoot4-West-Ping-Good" src="https://github.com/user-attachments/assets/dc4ba4f7-7c6c-4f2b-a91f-31eece2c790b" />
+
+
+
