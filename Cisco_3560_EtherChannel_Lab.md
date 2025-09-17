@@ -18,6 +18,11 @@ hostname East
 no ip domain-lookup
 vtp mode transparent
 
+! Global STP Best Practices
+spanning-tree mode pvst
+spanning-tree portfast default
+spanning-tree bpduguard default
+
 ! VLANs
 vlan 10
  name VM-Data
@@ -28,7 +33,7 @@ vlan 999
 interface vlan 999
  ip address 10.10.99.2 255.255.255.0
  no shutdown
-ip default-gateway 10.10.99.1
+ip default-gateway 10.10.99.254
 
 ! Uplink to RV340
 interface fa0/1
@@ -51,7 +56,7 @@ interface range fa0/7 - 8
  no shutdown
 
 interface port-channel 1
- description Trunk-to-West
+ description Backbone-Trunk-East-West
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
@@ -69,9 +74,13 @@ interface range fa0/3 - 4
  no shutdown
 
 interface port-channel 2
- description ESXi-Clients
+ description ESXi-Clients-Uplink
  switchport mode access
  switchport access vlan 10
+
+end
+write memory
+
 ```
 
 ---
@@ -86,6 +95,11 @@ hostname West
 no ip domain-lookup
 vtp mode transparent
 
+! Global STP Best Practices
+spanning-tree mode pvst
+spanning-tree portfast default
+spanning-tree bpduguard default
+
 ! VLANs
 vlan 10
  name VM-Data
@@ -96,7 +110,7 @@ vlan 999
 interface vlan 999
  ip address 10.10.99.3 255.255.255.0
  no shutdown
-ip default-gateway 10.10.99.1
+ip default-gateway 10.10.99.254
 
 ! EtherChannel Po1 - Trunk to East
 interface range fa0/7 - 8
@@ -110,7 +124,7 @@ interface range fa0/7 - 8
  no shutdown
 
 interface port-channel 1
- description Trunk-to-East
+ description Backbone-Trunk-East-West
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
@@ -128,9 +142,13 @@ interface range fa0/1 - 2
  no shutdown
 
 interface port-channel 2
- description ESXi-Server
+ description ESXi-Server-Uplink
  switchport mode access
  switchport access vlan 10
+
+end
+write memory
+
 ```
 
 ---
