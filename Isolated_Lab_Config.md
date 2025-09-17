@@ -361,3 +361,7 @@ vSwitch1 has vmnic2+vmnic3 active; Port Group VLAN 10; IP-hash/LACP set
 VMs get 172.20.10.x/24, GW 172.20.10.1
 
 Mgmt reachability (optional): from your laptop on 10.10.99.0/24, ping East 10.10.99.2, West 10.10.99.3.
+
+# 👉 Next step is on ESXi host networking:
+<img width="910" height="1216" alt="End Of Day" src="https://github.com/user-attachments/assets/5bb17075-aee5-487b-bc9b-ac80ea354696" />
+
