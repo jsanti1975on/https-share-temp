@@ -76,6 +76,8 @@ After cabling the Cisco AP to the West 3560 (PoE enabled):
 > After I logged in the device - I came to understand the CLI is not like IOS on my 3560
 >  switches or RV340.
 > configure directly in exec mode
+
+
 <img width="1033" height="443" alt="8" src="https://github.com/user-attachments/assets/e88fac3d-29bf-4c68-802f-20916c035f41" />
 <img width="1050" height="316" alt="9" src="https://github.com/user-attachments/assets/9db0111a-8439-49e2-ab85-6e6eafac055a" />
 
