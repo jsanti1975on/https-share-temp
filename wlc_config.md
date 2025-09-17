@@ -79,5 +79,10 @@ After cabling the Cisco AP to the West 3560 (PoE enabled):
 <img width="1033" height="443" alt="8" src="https://github.com/user-attachments/assets/e88fac3d-29bf-4c68-802f-20916c035f41" />
 <img width="1050" height="316" alt="9" src="https://github.com/user-attachments/assets/9db0111a-8439-49e2-ab85-6e6eafac055a" />
 
+> After some simple commands I wanted to test the web gui - just to view it and came to realive I am on a different subnet.
+<img width="1078" height="1117" alt="10" src="https://github.com/user-attachments/assets/2453a0c4-9e7c-4455-99fc-19bcf4842832" />
+
+
+
 
 
