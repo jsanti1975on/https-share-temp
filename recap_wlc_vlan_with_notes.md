@@ -49,3 +49,8 @@ This recap documents how the Cisco WLC management interface was configured and v
 - Add wireless SSID configuration and client test.
 
 ---
+<img width="1045" height="1322" alt="22-wlan-untagged" src="https://github.com/user-attachments/assets/5d205ec4-ade7-418f-ba64-d5e1bf3123dc" />
+<img width="1069" height="1263" alt="23-Recap-Image" src="https://github.com/user-attachments/assets/76ffbf2e-ca1e-48de-8a25-81ff1662be5d" />
+<img width="1078" height="1868" alt="24-Success-WLC-Gui" src="https://github.com/user-attachments/assets/caea2254-4219-4ec0-82f9-02adf719f053" />
+
+
