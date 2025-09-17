@@ -1,3 +1,6 @@
+# Quick and Dirty Topo
+<img width="1370" height="593" alt="Quick-Dirty-Topo" src="https://github.com/user-attachments/assets/19b9e796-98d5-447a-9cd0-e91d4a6f024e" />
+
 # Cisco 3560 EtherChannel Lab Configs
 
 This document contains the **fresh EtherChannel configurations** for the East and West 3560 switches.  
