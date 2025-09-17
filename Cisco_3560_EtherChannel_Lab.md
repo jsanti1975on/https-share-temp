@@ -169,3 +169,87 @@ show etherchannel summary    ! Po1(SU) and Po2(SU), members (P)
 - VMs in VLAN 10 can ping each other through the backbone  
 
 ---
+
+'=== Break: Morning Meal and after start below ===
+
+# vSphere Host Configuration for Cisco EtherChannel Lab
+
+This document outlines how to configure ESXi hosts to integrate with the Cisco 3560 EtherChannel lab.
+
+---
+
+## 🔹 Uplinks
+
+- **East ESXi Host** → `vmnic2 + vmnic3` (connected to East Po2: Fa0/3–4)  
+- **West ESXi Host** → `vmnic2 + vmnic3` (connected to West Po2: Fa0/1–2)  
+- Avoid `vmnic0` (pfSense mgmt) and leave `vmnic1` unused.  
+
+---
+
+## 🔹 Create a vSwitch
+
+1. Log into **vSphere Web Client**.  
+2. Go to **Networking → Virtual Switches**.  
+3. Create a **new standard vSwitch (vSwitch1)**.  
+4. Add uplinks: `vmnic2` + `vmnic3`.  
+
+---
+
+## 🔹 Set NIC Teaming Policy
+
+### For Standard vSwitch:
+- Go to **vSwitch1 Properties → NIC Teaming**.  
+- Change **Load Balancing** to:  
+  ✅ **Route based on IP hash**.  
+- Failback: Yes.  
+- Notify switches: Yes.  
+
+### For Distributed vSwitch (vDS):
+- On the **LAG uplink group**, set **Mode = LACP Active**.  
+
+👉 This ensures consistency with Cisco EtherChannel/LACP which requires **IP hash** load balancing.
+
+---
+
+## 🔹 Create Port Group
+
+- Port Group Name: `VM-Data`  
+- VLAN ID: **10**  
+- Assign test VMs (Client on East, Server on West) to this port group.  
+
+---
+
+## 🔹 Assign VM IPs
+
+- **East Client VM**  
+  - IP: `172.20.10.20`  
+  - Mask: `255.255.255.0`  
+  - GW: `172.20.10.254`  
+
+- **West Server VM**  
+  - IP: `172.20.10.30`  
+  - Mask: `255.255.255.0`  
+  - GW: `172.20.10.254`  
+
+---
+
+## 🔹 Test Connectivity
+
+On each VM:
+- Ping each other (`172.20.10.20 ↔ 172.20.10.30`).  
+- Ping default gateway (`172.20.10.254`).  
+
+On Cisco switches:
+```cisco
+show etherchannel summary
+show interfaces port-channel 2
+```
+- Expect **Po2 (SU)** with member links in **P** (bundled).  
+
+---
+
+✅ At this point:  
+- Po1 = backbone trunk (East⇔West).  
+- Po2 = ESXi uplinks (per side).  
+- VLAN 10 = end-to-end for VMs.  
+- VLAN 999 = management, isolated.
