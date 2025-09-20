@@ -1,0 +1,57 @@
+🚀 Plan for Tomorrow — Enable VLAN 10 on RV340
+1. RV340 Config (GUI)
+
+Log into the RV340 web interface.
+
+Go to: LAN → VLAN Settings.
+
+Edit VLAN 10:
+
+IP Address (Gateway): 172.20.10.254/24
+
+DHCP Server: Enabled, scope = 172.20.10.100 – 172.20.10.200
+
+Save & Apply.
+
+👉 This gives your VMs a proper gateway + DHCP leases on VLAN 10.
+
+2. Switch Config (West & East)
+
+Make sure your trunks are carrying VLAN 10 (already looks like they are).
+Check each trunk interface:
+
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 10,999
+switchport trunk native vlan 999
+
+3. vSphere Host Config
+
+Edit your Port Group VM Network (VLAN 10).
+
+Set VLAN ID = 10 (tagged).
+
+Assign VMs that should live in the 172.20.10.0/24 network.
+
+Keep VLAN999-Mgmt as untagged for ESXi/WLC management traffic.
+
+4. Verification
+
+From a VM on VLAN 10:
+
+ipconfig /renew → should pull an IP from the 172.20.10.0/24 scope.
+
+Ping gateway 172.20.10.254.
+
+Ping external (e.g., 8.8.8.8).
+
+From your client machine → join domain (DC at 172.20.10.100).
+
+5. After Confirmation
+
+Lock down VLAN 999 to only management devices (WLC, ESXi mgmt, switches).
+
+All user traffic stays in VLAN 10.
+
+⚡ By tomorrow:
+We’ll move VMs into VLAN 10, validate DHCP, and confirm routing out to the internet works while keeping VLAN 999 strictly for management.
