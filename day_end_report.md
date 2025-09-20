@@ -1,4 +1,6 @@
 # Day-End Report: EtherChannel Troubleshooting & Fix
+<img width="1019" height="1454" alt="Issue-Resolved-Image" src="https://github.com/user-attachments/assets/94a013f9-d5a7-44ac-a90c-f2e6323efd1b" />
+
 
 ## ✅ Issue Resolved Today: ESXi Uplink EtherChannel
 
