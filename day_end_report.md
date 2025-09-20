@@ -83,3 +83,8 @@ show vlan brief
 
 ---
 <img width="947" height="1406" alt="West-Config-VM-DATA" src="https://github.com/user-attachments/assets/3768cb8d-5c44-435a-b3c7-770525f5f14a" />
+
+# Untagged the vlan on the vSphere Host machine & configured the IP addy and dns using 8.8.8.8 to get internet => Will get orkidz-west.arpa domain set up tommorrow!
+<img width="1071" height="1646" alt="Untagged0" src="https://github.com/user-attachments/assets/c37b13bd-8bba-4efd-a047-74a1ba8df14c" />
+<img width="1368" height="745" alt="Untagged1" src="https://github.com/user-attachments/assets/555afd16-84f2-45de-98b2-17ac09aa700e" />
+
