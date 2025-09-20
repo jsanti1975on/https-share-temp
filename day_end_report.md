@@ -82,3 +82,4 @@ show vlan brief
 ```
 
 ---
+<img width="947" height="1406" alt="West-Config-VM-DATA" src="https://github.com/user-attachments/assets/3768cb8d-5c44-435a-b3c7-770525f5f14a" />
