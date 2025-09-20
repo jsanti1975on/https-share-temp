@@ -1,4 +1,6 @@
 # vSphere VLAN Tagging vs Untagged Behavior in Lab Setup
+<img width="1794" height="1006" alt="vsphere-vlan-behavior-diagram" src="https://github.com/user-attachments/assets/60f1d96e-d9f5-45e4-bfa6-65205ff427a6" />
+
 
 This document explains why the **Linux VM (`servera`) on VLAN 10** successfully routed to the internet after configuring a new vSwitch/port group as **untagged** in vSphere, and why tagging failed earlier.
 
