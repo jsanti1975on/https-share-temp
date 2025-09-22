@@ -84,3 +84,5 @@ This process demonstrated end-to-end **firmware recovery and deployment** of a C
 <img width="901" height="548" alt="Success2" src="https://github.com/user-attachments/assets/51284801-d769-4756-afda-5d3f59a88356" />
 <img width="910" height="1212" alt="Success3" src="https://github.com/user-attachments/assets/c9dd2227-90af-4dd1-a8b2-e3791a50342c" />
 <img width="924" height="1226" alt="Success4" src="https://github.com/user-attachments/assets/ef75f363-c6e8-4eda-be9f-08433dec18d6" />
+<img width="1009" height="1709" alt="Success5" src="https://github.com/user-attachments/assets/496b3bf5-ae08-488b-bcac-73f8f3dd3194" />
+
