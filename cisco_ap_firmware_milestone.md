@@ -68,3 +68,19 @@ tar -xtract tftp://10.10.10.45/ap3g2-k9w8-tar.153-3.JD14.tar flash:
 
 ## Key Takeaway
 This process demonstrated end-to-end **firmware recovery and deployment** of a Cisco AP using TFTP and pfSense integration. It confirms readiness for controller-based management and is a critical milestone toward completing the wireless infrastructure lab.
+
+
+### Images and notes: => My eyes are very red and I am very tired. But persistance paid off. It is 2:45 AM 
+> I poked around the base os - and practiced every command
+> I reviewed about 5 YouTube videos and all of the set up were not like mine
+> I used skills developed in my Cyber Security and Network Engineering program along with my A.A. degree
+> I combined bits of information from all sources to figure this one out.
+> The AP shiped without firmware and the image requires a subscription so I nneded to ethically control the device.
+> The wireless controller is useless without this AP
+> Now I can can continue dev ops with a wireless mesh and practice using the WLC that was covered in Information Security.
+
+### Screenshots.
+
+<img width="901" height="548" alt="Success2" src="https://github.com/user-attachments/assets/51284801-d769-4756-afda-5d3f59a88356" />
+<img width="910" height="1212" alt="Success3" src="https://github.com/user-attachments/assets/c9dd2227-90af-4dd1-a8b2-e3791a50342c" />
+<img width="924" height="1226" alt="Success4" src="https://github.com/user-attachments/assets/ef75f363-c6e8-4eda-be9f-08433dec18d6" />
