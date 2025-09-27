@@ -45,3 +45,45 @@ sentencepiece
 huggingface-hub
 pydub
 ```
+✅ Next Step: Install Miniconda (Recommended)
+
+Here’s a quick step-by-step to install Miniconda, the lightweight version of Anaconda:
+
+💻 1. Download and Install Miniconda
+
+Run these commands from your home directory:
+
+cd ~
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+
+
+Just follow the installer prompts:
+
+Accept the license.
+
+Let it install to the default path (e.g., ~/miniconda3).
+
+Say yes to modifying your .bashrc to auto-activate conda.
+
+✅ 2. Activate Conda
+
+Once installed:
+
+source ~/.bashrc
+conda --version  # Should now show version
+
+🛠️ 3. Create the Environment
+
+Now retry:
+
+conda create -n ava01 python=3.10
+conda activate ava01
+
+
+Then install your project requirements:
+
+pip install -r requirements.txt
+
+
+Let me know once Miniconda is installed and the environment is set up — and I can help you launch your first working prototype of your offline voice assistant (AvA01) 🎙️.
