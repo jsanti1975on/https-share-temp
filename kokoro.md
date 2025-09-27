@@ -87,3 +87,36 @@ pip install -r requirements.txt
 
 
 Let me know once Miniconda is installed and the environment is set up — and I can help you launch your first working prototype of your offline voice assistant (AvA01) 🎙️.
+
+```bash
+Run this command exactly as shown to activate Conda in your current shell session:
+
+eval "$(/home/jsantiago/miniconda3/bin/conda shell.bash hook)"
+
+
+After that, try:
+
+conda --version
+
+
+If that works, then continue with:
+
+conda create -n ava01 python=3.10
+conda activate ava01
+
+✅ Optional: Make It Persistent
+
+To avoid doing this every time, run:
+
+conda init
+
+
+Then restart your terminal or run:
+
+source ~/.bashrc
+
+
+Once you're in the ava01 environment, you'll be ready to install dependencies and finish setting up your offline voice agent 🎙️.
+
+Let me know when you're in the environment and we’ll continue!
+```
