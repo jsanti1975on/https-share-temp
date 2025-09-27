@@ -120,3 +120,75 @@ Once you're in the ava01 environment, you'll be ready to install dependencies an
 
 Let me know when you're in the environment and we’ll continue!
 ```
+
+
+```bash
+1. ✅ Ensure You Are in Your Conda Environment
+conda activate ava01
+
+2. ✅ Install Any Remaining Python Dependencies
+
+You got a ModuleNotFoundError for bs4. Let’s install that and anything else:
+
+pip install beautifulsoup4 ebooklib soundfile
+
+
+Then verify all needed packages from requirements.txt are installed:
+
+pip install -r kokoro_tts/requirements.txt
+
+3. ✅ Run the Kokoro TTS Module
+
+Navigate to your working directory and run:
+
+python3 -m kokoro_tts
+
+
+If this still throws import errors, try running from the parent directory, like you're doing now — that’s the correct structure for -m imports.
+
+4. ✅ Confirm Audio Output Works
+
+If the model runs correctly, but you can’t hear output, check:
+
+Are you on the same machine with speakers?
+
+Is your audio device enabled? Try testing audio:
+
+speaker-test -t wav -c 2
+
+
+If you're running headless, consider saving audio to a file and playing it locally:
+
+# inside Python code
+from playsound import playsound
+playsound("output.wav")
+
+5. ✅ Make It Repeatable (Optional)
+
+You can automate launching the environment + TTS with a simple shell script:
+
+#!/bin/bash
+source ~/miniconda3/bin/activate ava01
+cd ~/ava_voice_agent_setup
+python3 -m kokoro_tts
+
+
+Save as start_ava.sh, then run:
+
+chmod +x start_ava.sh
+./start_ava.sh
+
+🧠 Final Tip: Want Full Voice Agent (STT + TTS + LLM)?
+
+You’re building just the TTS part now (Kokoro), but the full agent also needs:
+
+✅ Ollama running locally (gemma:2b)
+
+🟡 Moonshine STT (for speech-to-text)
+
+✅ FastRTC if doing real-time audio
+
+🟢 n8n (optional for automation/workflow integration)
+
+We can wire all this up when you're ready.****
+```
