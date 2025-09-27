@@ -31,3 +31,17 @@ rm -rf kokoro-tts
 Then re-clone properly.
 
 Let me know when you're ready to test TTS output (or if you want to route audio out to another device).
+
+
+
+
+```bash
+numpy
+soundfile
+torch
+torchaudio
+transformers
+sentencepiece
+huggingface-hub
+pydub
+```
