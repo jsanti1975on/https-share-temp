@@ -299,3 +299,29 @@ Persist conversation history
 
 Connect to APIs (weather, calendar, et
 ```
+
+```bash
+🔁 Option 2: Permanent Fix (recommended)
+
+To fix this once and for all:
+
+Add Miniconda to your .bashrc:
+
+echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.bashrc
+
+
+Then reload your shell:
+
+source ~/.bashrc
+
+
+Now conda should work everywhere.
+
+✅ Recap Your Status:
+
+✅ Miniconda is installed
+
+❌ Shell doesn’t know where conda is (not in PATH)
+
+✅ Easy fix: source ~/miniconda3/bin/activate or update .bashrc
+```
