@@ -325,3 +325,66 @@ Now conda should work everywhere.
 
 ✅ Easy fix: source ~/miniconda3/bin/activate or update .bashrc
 ```
+
+```bash
+✅ From Clean Terminal to Ava Voice Agent (Step-by-Step)
+1. Create and Activate the Conda Environment
+conda create -n ava01 python=3.10 -y
+conda activate ava01
+
+2. Move to Your Project Folder
+cd ~/ava_voice_agent_setup
+
+3. Install All Required Python Packages
+pip install -r kokoro_tts/requirements.txt
+
+
+✅ This installs things like:
+
+numpy
+
+ebooklib
+
+sounddevice
+
+transformers
+
+torch
+
+etc.
+
+If you get any errors about missing modules after this step, we’ll handle them manually.
+
+4. Pull the Model (if not already done)
+
+If you haven’t pulled the Ollama model yet:
+
+ollama pull gemma:2b
+
+
+✅ This downloads the 2B model locally, no need to pull again if already downloaded.
+
+5. Run the Agent
+
+Once dependencies are installed and environment is activated:
+
+python3 -m kokoro_tts
+
+
+You should no longer see ModuleNotFoundError at this point — if you do, send me the error and we’ll patch it fast.
+
+✅ Final Optional Step (Voice Activation)
+
+If you want this to work with a mic/speaker:
+
+Make sure your system has audio drivers accessible in Linux (especially on PowerEdge or remote via VNC).
+
+You may need alsa-utils or pulseaudio.
+
+Check microphone input with:
+
+arecord -l
+
+
+Let me know when you’ve completed Step 5 — or share the next error/log if one pops up.
+```
