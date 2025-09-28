@@ -388,3 +388,33 @@ arecord -l
 
 Let me know when you’ve completed Step 5 — or share the next error/log if one pops up.
 ```
+
+```bash
+✅ Fix: Use Conda's version of libstdc++
+Step 1: Install the updated C++ runtime in your conda env
+
+Run this inside your environment (ava01):
+
+conda install -c conda-forge libstdcxx-ng
+
+
+This provides a modern libstdc++.so.6 compatible with GLIBCXX_3.4.32.
+
+⚠️ Optional Safety Check
+
+You can confirm the supported symbols in your version of libstdc++.so.6:
+
+strings $(g++ -print-file-name=libstdc++.so.6) | grep GLIBCXX
+
+
+You're specifically missing GLIBCXX_3.4.32.
+
+🟢 After Fix
+
+Try running again:
+
+python3 -m kokoro_tts
+
+
+Let me know if it progresses or hits the next dependency. You're very close now.
+```
