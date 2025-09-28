@@ -192,3 +192,110 @@ You’re building just the TTS part now (Kokoro), but the full agent also needs:
 
 We can wire all this up when you're ready.****
 ```
+
+# Weekend Start
+```bash
+Perfect — fresh terminal, clean start. Here's your step-by-step to get your AvA voice assistant up and running on Ubuntu.
+
+🧠 Objective:
+
+Run your local AvA voice assistant using:
+
+🧠 Ollama (e.g., gemma:2b)
+
+🗣️ Kokoro-TTS for voice output
+
+🔁 Optional: voice input (STT later)
+
+✅ PREREQUISITES
+🔹 1. Update your system
+sudo apt update && sudo apt upgrade -y
+
+🔹 2. Install system dependencies (audio + build tools)
+sudo apt install -y \
+  git curl build-essential portaudio19-dev libportaudio2 \
+  libportaudiocpp0 ffmpeg python3 python3-pip python3-venv
+
+⚙️ ENVIRONMENT SETUP
+🔹 3. Set up Python virtual environment
+cd ~
+mkdir ava_voice_agent_setup && cd ava_voice_agent_setup
+python3 -m venv vAvA
+source vAvA/bin/activate
+
+
+Your prompt should now show (vAvA).
+
+🔹 4. Clone or create Kokoro-TTS folder
+
+If you're using your own local files:
+
+mkdir kokoro_tts && cd kokoro_tts
+touch __init__.py __main__.py requirements.txt
+
+
+Paste your code into __init__.py and __main__.py as you had before.
+
+Or if you're cloning from GitHub (fix auth or use token):
+
+git clone https://github.com/NikolaJankovic/kokoro-tts.git
+cd kokoro-tts
+
+📦 PYTHON DEPENDENCIES
+🔹 5. Install required packages
+
+If using your requirements.txt:
+
+pip install -r requirements.txt
+
+
+Or manually install what you've needed so far:
+
+pip install numpy ebooklib beautifulsoup4 sounddevice
+
+🧠 LLM SETUP
+🔹 6. Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+
+Once installed, verify:
+
+ollama --version
+
+🔹 7. Start Ollama service (if not already)
+ollama serve
+
+
+Then in another terminal (or backgrounded):
+
+ollama pull gemma:2b
+
+▶️ RUN THE ASSISTANT
+🔹 8. Run Kokoro-TTS
+
+From the root of your project:
+
+python3 -m kokoro_tts
+
+📌 TROUBLESHOOTING
+
+If you get missing module errors:
+
+pip install <missing-package>
+
+
+If audio doesn’t play:
+
+sudo apt install libportaudio2
+speaker-test -t wav
+
+🏁 OPTIONAL NEXT STEPS
+
+Add microphone input (speech_recognition, pyaudio, whisper, etc.)
+
+Add a dashboard
+
+Persist conversation history
+
+Connect to APIs (weather, calendar, et
+```
