@@ -14,8 +14,12 @@ This document provides the configuration and workflow steps for setting up a **C
 
 ---
 
-## 2. Initial Setup Commands
+## 2. Initial Setup Commands: We used to pfsence to route for practice
 
+<img width="1032" height="956" alt="Take-Note" src="https://github.com/user-attachments/assets/0a13fbdd-51ea-4fe8-8fd5-3852078d29f9" />
+
+
+## 2.1 Config on native vlan - Also place the unextrated file in the solarwinds app. Practice a Mesh config private comms.
 ```cisco
 set IP_ADDR 10.10.99.109
 set NETMASK 255.255.255.0
